@@ -1,0 +1,15 @@
+{% extends 'AcmeAdminBundle:Default:main.html.twig' %}
+
+{% block title %}Acme Demo Application{% endblock %}
+
+{% block container %}
+	<div class="row">
+		<h3>Bienvenido a la zona restringida</h3>
+		<a href="{{ url('acme_admin_gestion_homepage') }}">Ir a la zona de gestion</a><br>
+
+		<a href="{{ url('acme_admin_gestion_agencias') }}">Ir al listado de agencias</a><br>
+		<a href="{{ url('acme_admin_crear_agencia') }}">Crear una nueva agencia</a><br>
+
+
+	</div>
+{% endblock %}

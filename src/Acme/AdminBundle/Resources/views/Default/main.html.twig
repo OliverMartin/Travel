@@ -1,0 +1,23 @@
+{% extends '::base.html.twig' %}
+
+{% block title %}Vistatravek Tour Operador: Administracion{% endblock %}
+
+{% block body %}
+	<div class="container">
+
+		<div class="header">
+			<ul class="nav nav-pills pull-right">				
+				<li>Hola, {{ app.user.username }} <a href="{{ url('fos_user_security_logout') }}" style="display:inline;">close</a></li>
+			</ul>
+			<p>Vistatravel</p>
+		</div>
+
+		<div class="separator">&nbsp;</div>
+
+		{% include is_granted('ROLE_ADMIN') ? 'AcmeAdminBundle:Default:menu.html.twig' : 'AcmeAdminBundle:Default:menu_noadmin.html.twig' %}
+
+		{% block container %}
+		{% endblock %}
+
+    </div>
+{% endblock %}
