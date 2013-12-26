@@ -1,25 +1,136 @@
-.container{
-  width:99%;
-  margin:auto;
-  padding: 0;
+/************************************************************************************
+RESET
+*************************************************************************************/
+/*
+@font-face {
+    font-family: 'ciclefina';
+    src: url('fonts/cicle_fina_macroman/Cicle_Fina-webfont.eot');
+    src: url('fonts/cicle_fina_macroman/Cicle_Fina-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/cicle_fina_macroman/Cicle_Fina-webfont.woff') format('woff'),
+         url('fonts/cicle_fina_macroman/Cicle_Fina-webfont.ttf') format('truetype'),
+         url('fonts/cicle_fina_macroman/Cicle_Fina-webfont.svg#ciclefina') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
 }
+*/
+* {
+  font-size: 100%;
+  font-family: 'Varela Round',Sans-Serif;
+  -webkit-font-smoothing: antialiased; text-shadow: 1px 1px 1px rgba(0,0,0,0.004);
+}
+/************************************************************************************
+GENERAL STYLING
+*************************************************************************************/
+html,body{
+  background-color:#ffffff;
+  color:#3d6e93;
+  font-family: 'Varela Round',Sans-Serif;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Varela Round',Sans-Serif;
+}
+.orange {
+  color: #f78064;
+}
+.blue {
+  color: #3d6e93;
+}
+.fbig {
+  font-size: 1.6em;
+}
+/************************************************************************************
+STRUCTURE
+*************************************************************************************/
 .header {
-  background-color: #ededed;
+  background-color: #ececec;
   height: 60px;
   width: 100%;
   margin-top:4px;
   line-height: 60px;
   overflow: hidden;
+  padding-right: 25px;
+  padding-left: 20px;
+  font-size: 15pt;
 }
 .header img {
   vertical-align: middle;
 }
-.separator {
-  background-color: #aec5d6;
-  width:100%;
-  height: 15px;
-  margin-top:4px;
+.container{
+  width:99%;
+  margin:auto;
+  padding: 0;
 }
+.content {
+    background: none repeat scroll 0 0 #d1e4ed;
+    bottom: 5px;
+    margin-top: 5px;
+    min-height: 621px;
+    position: absolute;
+    top: 63px;
+    width: 99%;
+}
+.access{
+  text-align: center;
+  vertical-align: middle;
+  height: 150px;
+  padding-top:15%;
+  width:500px;
+  margin:auto;
+}
+#formAccess {
+  background: #fff;
+  padding: 5px;
+}
+input.grey {
+  color: #3d6e93;
+  text-align: center;
+  border: 0px;
+  background: #ececec;
+  border-radius: 0;
+  line-height: 20px;
+  font-size: 1em;
+  width: 49.5%;
+  height:30px; 
+  font-style: italic;
+  font-weight: 200;
+}
+.fl {
+  float:left;
+}
+.fr {
+  float: right;
+}
+.inputs{
+  overflow: hidden;
+  margin-bottom: 2px;
+}
+.containerButtons {
+  overflow: hidden;
+  height: 30px;
+}
+.buttonBlue {
+  width: 100%;
+  border:0px;
+  border-radius: 0;
+  background: #3d6e93;
+  color:#fff;
+  height: 30px;
+  font-weight: bold;
+}
+.over .buttonBlue {
+  background-color: #f78064;
+}
+.over {
+    margin-top: -30px;
+}
+.over, .out {
+  transition: margin-top 200ms ease-out 0s;
+}
+.italic{
+  font-style: italic;
+}
+
 
 .navbar {
   width: 100%;
@@ -49,3 +160,4 @@
 .navbar li.active a {
   color: #fff;
 }
+.row{margin:0;}
