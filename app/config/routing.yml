@@ -1,3 +1,19 @@
+frontend_providers:
+    resource: "@FrontendProvidersBundle/Resources/config/routing.yml"
+    prefix:   /
+
+frontend_app:
+    resource: "@FrontendAppBundle/Resources/config/routing.yml"
+    prefix:   /
+
+frontend_admin:
+    resource: "@FrontendAdminBundle/Resources/config/routing.yml"
+    prefix:   /
+
+frontend_configuration:
+    resource: "@FrontendConfigurationBundle/Resources/config/routing.yml"
+    prefix:   /
+
 # app/config/routing.yml
 
 # AcmeAdminBundle Routing

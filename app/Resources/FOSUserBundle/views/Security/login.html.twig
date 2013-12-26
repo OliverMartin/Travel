@@ -2,27 +2,49 @@
 
 {% trans_default_domain 'FOSUserBundle' %}
 
+{% block headerright %}
+    <span class="orange">Acceso</span>&nbsp;<span class="blue">Administrador</span>
+{% endblock %}
+
 {% block fos_user_content %}
-{% if error %}
-    <div>{{ error|trans }}</div>
-{% endif %}
+    <div class="access">
+        <h3 class="blue">Bienvenido</h3>
+        <div id="formAccess">
+            <form class="form-signin" role="form" action="{{ path("fos_user_security_check") }}" method="post">            	
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                <div class="inputs">
+                    <input class="grey fl" type="text" id="username" name="_username" value="{{ last_username }}" placeholder="Introduce tu Mail" autocomplete="off" autofocus/>
 
-<form class="form-signin" role="form" action="{{ path("fos_user_security_check") }}" method="post">
-	<h2 class="form-sigin-heading">Please sign in</h2>
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+                    <input class="grey fr" type="password" id="password" name="_password" placeholder="Introduce tu Password"/>
+                </div>
+                
+                <!--<label for="remember_me" class="checkbox">
+                    <input type="checkbox" id="remember_me" name="_remember_me" value="on" />
+                    {{ 'security.login.remember_me'|trans }}
+                </label>-->
 
-    <!--<label for="username">{{ 'security.login.username'|trans }}</label>-->
-    <input class="form-control" type="text" id="username" name="_username" value="{{ last_username }}" required="required" placeholder="User Name"/>
-
-    <!--<label for="password">{{ 'security.login.password'|trans }}</label>-->
-    <input class="form-control" type="password" id="password" name="_password" required="required" placeholder="Password"/>
-
-    <!---->
-    <label for="remember_me" class="checkbox">
-    	<input type="checkbox" id="remember_me" name="_remember_me" value="on" />
-    	{{ 'security.login.remember_me'|trans }}
-    </label>
-
-    <input class="btn btn-lg btn-primary btn-block" type="submit" id="_submit" name="_submit" value="{{ 'security.login.submit'|trans }}" />
-</form>
+                <div class="containerButtons">
+                    <div class="button">           
+                        <input class="buttonBlue" type="submit" id="_submit" name="_submit" value="ENTRAR" />
+                    </div>
+                </div>
+            </form>
+        </div>
+        {% if error %}
+            <div class="orange italic">
+                <!--{{ error|trans }}-->
+                mail o contraseña incorrecto
+            </div>
+        {% endif %}        
 {% endblock fos_user_content %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+    {% if error %}
+        <script language="javascript">
+            doShake("formAccess");
+            changeColor( );
+        </script>
+    {% endif %}
+{% endblock %}
