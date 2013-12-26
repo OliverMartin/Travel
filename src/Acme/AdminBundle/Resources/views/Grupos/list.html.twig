@@ -1,0 +1,16 @@
+{% extends 'AcmeAdminBundle:Default:main.html.twig' %}
+
+{% block container %}	
+	<div class="row">
+		<div class="col-md-5 fbig">Listado de grupos</div>
+		<div class="col-md-1"><a href="{{ url('acme_admin_crear_grupo') }}">Nuevo</a></div>
+	</div>
+
+	{% for group in groups %}
+		<div class="row">
+			<div class="col-md-4">{{ group.name }}</div>
+			<div class="col-md-1"><a href="{{ url('acme_admin_modificar_grupo', {'id': group.id}) }}">Modificar</a></div>
+			<div class="col-md-1"><a href="{{ url('acme_admin_eliminar_grupo', {'id': group.id}) }}">Eliminar</a></div>
+		</div>
+	{% endfor %}
+{% endblock %}

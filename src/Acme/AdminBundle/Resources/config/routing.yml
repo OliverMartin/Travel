@@ -4,9 +4,23 @@ acme_admin_homepage:
 acme_admin_gestion_homepage:
     pattern:  /admin/a/gestion/
     defaults: { _controller: AcmeAdminBundle:Default:gestion }
+
+acme_admin_gestion_grupos:
+    pattern: /admin/a/grupos/
+    defaults: { _controller: AcmeAdminBundle:Groups:list }
+acme_admin_crear_grupo:
+    pattern: /admin/a/grupos/create
+    defaults: { _controller: AcmeAdminBundle:Groups:create }
+acme_admin_modificar_grupo:
+    pattern: /admin/a/grupos/modify/{id}
+    defaults: { _controller: AcmeAdminBundle:Groups:modify }
+acme_admin_eliminar_grupo:
+    pattern: /admin/a/grupos/delete/{id}
+    defaults: { _controller: AcmeAdminBundle:Groups:delete }
+
 acme_admin_gestion_agencias:
     pattern: /admin/a/agencias/
-    defaults: { _controller: AcmeAdminBundle:Agencias:list }
+    defaults: { _controller: AcmeAdminBundle:Agencies:list }
 acme_admin_crear_agencia:
     pattern: /admin/a/agencias/create
-    defaults: { _controller: AcmeAdminBundle:Agencias:create }
+    defaults: { _controller: AcmeAdminBundle:Agencies:create }

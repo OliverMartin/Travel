@@ -1,0 +1,7 @@
+parameters:
+#    frontend_configuration.example.class: Frontend\ConfigurationBundle\Example
+
+services:
+#    frontend_configuration.example:
+#        class: %frontend_configuration.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

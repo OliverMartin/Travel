@@ -1,0 +1,5 @@
+# src/Acme/AdminBundle/Resources/config/validation.yml
+Acme\AdminBundle\Entity\Group:
+    properties:
+        name:
+           - NotBlank: ~

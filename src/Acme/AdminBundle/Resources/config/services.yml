@@ -2,6 +2,13 @@ parameters:
 #    acme_admin.example.class: Acme\AdminBundle\Example
 
 services:
-#    acme_admin.example:
-#        class: %acme_admin.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
+    acme_admin.form.type.group:
+        class: Acme\AdminBundle\Form\Type\GroupType
+        tags:
+            - { name: form.type, alias: group }
+
+    acme_admin.group.manager:
+        class: Acme\AdminBundle\Entity\GroupManager
+        arguments: 
+            em: "@doctrine.orm.entity_manager"
+            class: Acme\AdminBundle\Entity\Group
