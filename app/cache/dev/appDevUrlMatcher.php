@@ -135,6 +135,34 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
 
         }
 
+        if (0 === strpos($pathinfo, '/hello')) {
+            // frontend_public_homepage
+            if (preg_match('#^/hello/(?P<name>[^/]++)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'frontend_public_homepage')), array (  '_controller' => 'Frontend\\PublicBundle\\Controller\\DefaultController::indexAction',));
+            }
+
+            // frontend_providers_homepage
+            if (preg_match('#^/hello/(?P<name>[^/]++)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'frontend_providers_homepage')), array (  '_controller' => 'Frontend\\ProvidersBundle\\Controller\\DefaultController::indexAction',));
+            }
+
+            // frontend_app_homepage
+            if (preg_match('#^/hello/(?P<name>[^/]++)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'frontend_app_homepage')), array (  '_controller' => 'Frontend\\AppBundle\\Controller\\DefaultController::indexAction',));
+            }
+
+            // frontend_admin_homepage
+            if (preg_match('#^/hello/(?P<name>[^/]++)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'frontend_admin_homepage')), array (  '_controller' => 'Frontend\\AdminBundle\\Controller\\DefaultController::indexAction',));
+            }
+
+            // frontend_configuration_homepage
+            if (preg_match('#^/hello/(?P<name>[^/]++)$#s', $pathinfo, $matches)) {
+                return $this->mergeDefaults(array_replace($matches, array('_route' => 'frontend_configuration_homepage')), array (  '_controller' => 'Frontend\\ConfigurationBundle\\Controller\\DefaultController::indexAction',));
+            }
+
+        }
+
         if (0 === strpos($pathinfo, '/admin')) {
             // acme_admin_homepage
             if (rtrim($pathinfo, '/') === '/admin') {
@@ -146,13 +174,43 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
             }
 
             if (0 === strpos($pathinfo, '/admin/a')) {
-                // acme_admin_gestion_homepage
-                if (rtrim($pathinfo, '/') === '/admin/a/gestion') {
-                    if (substr($pathinfo, -1) !== '/') {
-                        return $this->redirect($pathinfo.'/', 'acme_admin_gestion_homepage');
+                if (0 === strpos($pathinfo, '/admin/a/g')) {
+                    // acme_admin_gestion_homepage
+                    if (rtrim($pathinfo, '/') === '/admin/a/gestion') {
+                        if (substr($pathinfo, -1) !== '/') {
+                            return $this->redirect($pathinfo.'/', 'acme_admin_gestion_homepage');
+                        }
+
+                        return array (  '_controller' => 'Acme\\AdminBundle\\Controller\\DefaultController::gestionAction',  '_route' => 'acme_admin_gestion_homepage',);
                     }
 
-                    return array (  '_controller' => 'Acme\\AdminBundle\\Controller\\DefaultController::gestionAction',  '_route' => 'acme_admin_gestion_homepage',);
+                    if (0 === strpos($pathinfo, '/admin/a/grupos')) {
+                        // acme_admin_gestion_grupos
+                        if (rtrim($pathinfo, '/') === '/admin/a/grupos') {
+                            if (substr($pathinfo, -1) !== '/') {
+                                return $this->redirect($pathinfo.'/', 'acme_admin_gestion_grupos');
+                            }
+
+                            return array (  '_controller' => 'Acme\\AdminBundle\\Controller\\GroupsController::listAction',  '_route' => 'acme_admin_gestion_grupos',);
+                        }
+
+                        // acme_admin_crear_grupo
+                        if ($pathinfo === '/admin/a/grupos/create') {
+                            return array (  '_controller' => 'Acme\\AdminBundle\\Controller\\GroupsController::createAction',  '_route' => 'acme_admin_crear_grupo',);
+                        }
+
+                        // acme_admin_modificar_grupo
+                        if (0 === strpos($pathinfo, '/admin/a/grupos/modify') && preg_match('#^/admin/a/grupos/modify/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                            return $this->mergeDefaults(array_replace($matches, array('_route' => 'acme_admin_modificar_grupo')), array (  '_controller' => 'Acme\\AdminBundle\\Controller\\GroupsController::modifyAction',));
+                        }
+
+                        // acme_admin_eliminar_grupo
+                        if (0 === strpos($pathinfo, '/admin/a/grupos/delete') && preg_match('#^/admin/a/grupos/delete/(?P<id>[^/]++)$#s', $pathinfo, $matches)) {
+                            return $this->mergeDefaults(array_replace($matches, array('_route' => 'acme_admin_eliminar_grupo')), array (  '_controller' => 'Acme\\AdminBundle\\Controller\\GroupsController::deleteAction',));
+                        }
+
+                    }
+
                 }
 
                 if (0 === strpos($pathinfo, '/admin/a/agencias')) {
@@ -162,45 +220,39 @@ class appDevUrlMatcher extends Symfony\Bundle\FrameworkBundle\Routing\Redirectab
                             return $this->redirect($pathinfo.'/', 'acme_admin_gestion_agencias');
                         }
 
-                        return array (  '_controller' => 'Acme\\AdminBundle\\Controller\\AgenciasController::listAction',  '_route' => 'acme_admin_gestion_agencias',);
+                        return array (  '_controller' => 'Acme\\AdminBundle\\Controller\\AgenciesController::listAction',  '_route' => 'acme_admin_gestion_agencias',);
                     }
 
                     // acme_admin_crear_agencia
                     if ($pathinfo === '/admin/a/agencias/create') {
-                        return array (  '_controller' => 'Acme\\AdminBundle\\Controller\\AgenciasController::createAction',  '_route' => 'acme_admin_crear_agencia',);
+                        return array (  '_controller' => 'Acme\\AdminBundle\\Controller\\AgenciesController::createAction',  '_route' => 'acme_admin_crear_agencia',);
                     }
 
                 }
 
+            }
+
+            // fos_user_security_login
+            if ($pathinfo === '/admin/login') {
+                return array (  '_controller' => 'FOS\\UserBundle\\Controller\\SecurityController::loginAction',  '_route' => 'fos_user_security_login',);
             }
 
         }
 
-        if (0 === strpos($pathinfo, '/log')) {
-            if (0 === strpos($pathinfo, '/login')) {
-                // fos_user_security_login
-                if ($pathinfo === '/login') {
-                    return array (  '_controller' => 'FOS\\UserBundle\\Controller\\SecurityController::loginAction',  '_route' => 'fos_user_security_login',);
-                }
-
-                // fos_user_security_check
-                if ($pathinfo === '/login_check') {
-                    if ($this->context->getMethod() != 'POST') {
-                        $allow[] = 'POST';
-                        goto not_fos_user_security_check;
-                    }
-
-                    return array (  '_controller' => 'FOS\\UserBundle\\Controller\\SecurityController::checkAction',  '_route' => 'fos_user_security_check',);
-                }
-                not_fos_user_security_check:
-
+        // fos_user_security_check
+        if ($pathinfo === '/login_check') {
+            if ($this->context->getMethod() != 'POST') {
+                $allow[] = 'POST';
+                goto not_fos_user_security_check;
             }
 
-            // fos_user_security_logout
-            if ($pathinfo === '/logout') {
-                return array (  '_controller' => 'FOS\\UserBundle\\Controller\\SecurityController::logoutAction',  '_route' => 'fos_user_security_logout',);
-            }
+            return array (  '_controller' => 'FOS\\UserBundle\\Controller\\SecurityController::checkAction',  '_route' => 'fos_user_security_check',);
+        }
+        not_fos_user_security_check:
 
+        // fos_user_security_logout
+        if ($pathinfo === '/admin/logout') {
+            return array (  '_controller' => 'FOS\\UserBundle\\Controller\\SecurityController::logoutAction',  '_route' => 'fos_user_security_logout',);
         }
 
         if (0 === strpos($pathinfo, '/profile')) {

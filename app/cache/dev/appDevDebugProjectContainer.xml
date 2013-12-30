@@ -4,7 +4,7 @@
     <parameter key="kernel.root_dir">D:/SapiensSoftware/Vistatravel/home/app</parameter>
     <parameter key="kernel.environment">dev</parameter>
     <parameter key="kernel.debug">true</parameter>
-    <parameter key="kernel.name">app</parameter>
+    <parameter key="kernel.name">ap_</parameter>
     <parameter key="kernel.cache_dir">D:/SapiensSoftware/Vistatravel/home/app/cache/dev</parameter>
     <parameter key="kernel.logs_dir">D:/SapiensSoftware/Vistatravel/home/app/logs</parameter>
     <parameter key="kernel.bundles" type="collection">
@@ -19,6 +19,11 @@
       <parameter key="FOSUserBundle">FOS\UserBundle\FOSUserBundle</parameter>
       <parameter key="AcmeUserBundle">Acme\UserBundle\AcmeUserBundle</parameter>
       <parameter key="AcmeAdminBundle">Acme\AdminBundle\AcmeAdminBundle</parameter>
+      <parameter key="FrontendConfigurationBundle">Frontend\ConfigurationBundle\FrontendConfigurationBundle</parameter>
+      <parameter key="FrontendAdminBundle">Frontend\AdminBundle\FrontendAdminBundle</parameter>
+      <parameter key="FrontendAppBundle">Frontend\AppBundle\FrontendAppBundle</parameter>
+      <parameter key="FrontendProvidersBundle">Frontend\ProvidersBundle\FrontendProvidersBundle</parameter>
+      <parameter key="FrontendPublicBundle">Frontend\PublicBundle\FrontendPublicBundle</parameter>
       <parameter key="AcmeDemoBundle">Acme\DemoBundle\AcmeDemoBundle</parameter>
       <parameter key="WebProfilerBundle">Symfony\Bundle\WebProfilerBundle\WebProfilerBundle</parameter>
       <parameter key="SensioDistributionBundle">Sensio\Bundle\DistributionBundle\SensioDistributionBundle</parameter>
@@ -171,7 +176,9 @@
       <parameter>D:\SapiensSoftware\Vistatravel\home\vendor\friendsofsymfony\user-bundle\FOS\UserBundle\Resources\config\validation.xml</parameter>
       <parameter>D:\SapiensSoftware\Vistatravel\home\vendor\friendsofsymfony\user-bundle\FOS\UserBundle\Resources\config\validation\orm.xml</parameter>
     </parameter>
-    <parameter key="validator.mapping.loader.yaml_files_loader.mapping_files" type="collection"/>
+    <parameter key="validator.mapping.loader.yaml_files_loader.mapping_files" type="collection">
+      <parameter>D:\SapiensSoftware\Vistatravel\home\src\Acme\AdminBundle\Resources\config\validation.yml</parameter>
+    </parameter>
     <parameter key="validator.expression.class">Symfony\Component\Validator\Constraints\ExpressionValidator</parameter>
     <parameter key="validator.translation_domain">validators</parameter>
     <parameter key="fragment.listener.class">Symfony\Component\HttpKernel\EventListener\FragmentListener</parameter>
@@ -2288,6 +2295,7 @@
               <argument key="fos_user_registration">fos_user.registration.form.type</argument>
               <argument key="fos_user_change_password">fos_user.change_password.form.type</argument>
               <argument key="fos_user_resetting">fos_user.resetting.form.type</argument>
+              <argument key="group">acme_admin.form.type.group</argument>
             </argument>
             <argument type="collection">
               <argument key="form" type="collection">
@@ -2568,7 +2576,9 @@
             </argument>
             <argument type="service">
               <service class="Symfony\Component\Validator\Mapping\Loader\YamlFilesLoader" public="false">
-                <argument type="collection"/>
+                <argument type="collection">
+                  <argument>D:\SapiensSoftware\Vistatravel\home\src\Acme\AdminBundle\Resources\config\validation.yml</argument>
+                </argument>
               </service>
             </argument>
           </argument>
@@ -2811,7 +2821,7 @@
       <argument type="collection">
         <argument type="service">
           <service class="Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider" public="false">
-            <argument type="service" id="fos_user.user_provider.username"/>
+            <argument type="service" id="fos_user.user_provider.username_email"/>
             <argument type="service" id="security.user_checker"/>
             <argument>main</argument>
             <argument type="service" id="security.encoder_factory"/>
@@ -2820,7 +2830,7 @@
         </argument>
         <argument type="service">
           <service class="Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider" public="false">
-            <argument>52b801a20b4b7</argument>
+            <argument>52c1258a765a9</argument>
           </service>
         </argument>
       </argument>
@@ -2909,7 +2919,7 @@
       <argument type="service" id="router"/>
       <call method="registerListener">
         <argument>main</argument>
-        <argument>/logout</argument>
+        <argument>/admin/logout</argument>
         <argument>logout</argument>
         <argument>_csrf_token</argument>
         <argument>null</argument>
@@ -2929,7 +2939,7 @@
                 <call method="add">
                   <argument type="service">
                     <service class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
-                      <argument>^/login$</argument>
+                      <argument>^/admin/login$</argument>
                     </service>
                   </argument>
                   <argument type="collection">
@@ -2996,7 +3006,7 @@
           <service class="Symfony\Component\Security\Http\Firewall\ContextListener" public="false">
             <argument type="service" id="security.context"/>
             <argument type="collection">
-              <argument type="service" id="fos_user.user_provider.username"/>
+              <argument type="service" id="fos_user.user_provider.username_email"/>
             </argument>
             <argument>main</argument>
             <argument type="service" id="monolog.logger.security" on-invalid="null"/>
@@ -3020,13 +3030,13 @@
                     <argument type="service" id="router" on-invalid="null"/>
                   </service>
                 </argument>
-                <argument>/</argument>
+                <argument>/admin/</argument>
               </service>
             </argument>
             <argument type="collection">
               <argument key="csrf_parameter">_csrf_token</argument>
               <argument key="intention">logout</argument>
-              <argument key="logout_path">/logout</argument>
+              <argument key="logout_path">/admin/logout</argument>
             </argument>
             <call method="addHandler">
               <argument type="service">
@@ -3057,9 +3067,9 @@
                   </service>
                 </argument>
                 <argument type="collection">
+                  <argument key="login_path">/admin/login</argument>
                   <argument key="always_use_default_target_path">false</argument>
                   <argument key="default_target_path">/</argument>
-                  <argument key="login_path">/login</argument>
                   <argument key="target_path_parameter">_target_path</argument>
                   <argument key="use_referer">false</argument>
                 </argument>
@@ -3078,7 +3088,7 @@
                   </service>
                 </argument>
                 <argument type="collection">
-                  <argument key="login_path">/login</argument>
+                  <argument key="login_path">/admin/login</argument>
                   <argument key="failure_path">null</argument>
                   <argument key="failure_forward">false</argument>
                   <argument key="failure_path_parameter">_failure_path</argument>
@@ -3104,7 +3114,7 @@
         <argument type="service">
           <service class="Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener" public="false">
             <argument type="service" id="security.context"/>
-            <argument>52b801a20b4b7</argument>
+            <argument>52c1258a765a9</argument>
             <argument type="service" id="monolog.logger.security" on-invalid="null"/>
           </service>
         </argument>
@@ -3118,7 +3128,7 @@
                 <call method="add">
                   <argument type="service">
                     <service class="Symfony\Component\HttpFoundation\RequestMatcher" public="false">
-                      <argument>^/login$</argument>
+                      <argument>^/admin/login$</argument>
                     </service>
                   </argument>
                   <argument type="collection">
@@ -3196,7 +3206,7 @@
                   <argument type="service" id="router" on-invalid="null"/>
                 </service>
               </argument>
-              <argument>/login</argument>
+              <argument>/admin/login</argument>
               <argument>false</argument>
             </service>
           </argument>
@@ -3568,6 +3578,7 @@
             <argument type="collection">
               <argument key="FOSUserBundle">FOS\UserBundle\Entity</argument>
               <argument key="AcmeUserBundle">Acme\UserBundle\Entity</argument>
+              <argument key="AcmeAdminBundle">Acme\AdminBundle\Entity</argument>
             </argument>
           </call>
           <call method="setMetadataCacheImpl">
@@ -3625,6 +3636,17 @@
                     </service>
                   </argument>
                   <argument>Acme\UserBundle\Entity</argument>
+                </call>
+                <call method="addDriver">
+                  <argument type="service">
+                    <service class="Doctrine\ORM\Mapping\Driver\AnnotationDriver" public="false">
+                      <argument type="service" id="annotation_reader"/>
+                      <argument type="collection">
+                        <argument>D:\SapiensSoftware\Vistatravel\home\src\Acme\AdminBundle\Entity</argument>
+                      </argument>
+                    </service>
+                  </argument>
+                  <argument>Acme\AdminBundle\Entity</argument>
                 </call>
                 <call method="addDriver">
                   <argument type="service">
@@ -3724,7 +3746,7 @@
       <argument type="service" id="security.authentication.session_strategy"/>
       <argument type="service" id="service_container"/>
     </service>
-    <service id="fos_user.user_provider.username" class="FOS\UserBundle\Security\UserProvider" public="false">
+    <service id="fos_user.user_provider.username_email" class="FOS\UserBundle\Security\EmailUserProvider" public="false">
       <argument type="service" id="fos_user.user_manager"/>
     </service>
     <service id="fos_user.util.user_manipulator" class="FOS\UserBundle\Util\UserManipulator">
@@ -3804,6 +3826,13 @@
       <tag name="kernel.event_subscriber"/>
       <argument type="service" id="router"/>
       <argument>86400</argument>
+    </service>
+    <service id="acme_admin.form.type.group" class="Acme\AdminBundle\Form\Type\GroupType">
+      <tag name="form.type" alias="group"/>
+    </service>
+    <service id="acme_admin.group.manager" class="Acme\AdminBundle\Entity\GroupManager">
+      <argument key="em" type="service" id="doctrine.orm.default_entity_manager"/>
+      <argument key="class">Acme\AdminBundle\Entity\Group</argument>
     </service>
     <service id="twig.extension.acme.demo" class="Acme\DemoBundle\Twig\Extension\DemoExtension" public="false">
       <tag name="twig.extension"/>
@@ -4121,6 +4150,26 @@
       <call method="addPath">
         <argument>D:\SapiensSoftware\Vistatravel\home\src\Acme\AdminBundle/Resources/views</argument>
         <argument>AcmeAdmin</argument>
+      </call>
+      <call method="addPath">
+        <argument>D:\SapiensSoftware\Vistatravel\home\src\Frontend\ConfigurationBundle/Resources/views</argument>
+        <argument>FrontendConfiguration</argument>
+      </call>
+      <call method="addPath">
+        <argument>D:\SapiensSoftware\Vistatravel\home\src\Frontend\AdminBundle/Resources/views</argument>
+        <argument>FrontendAdmin</argument>
+      </call>
+      <call method="addPath">
+        <argument>D:\SapiensSoftware\Vistatravel\home\src\Frontend\AppBundle/Resources/views</argument>
+        <argument>FrontendApp</argument>
+      </call>
+      <call method="addPath">
+        <argument>D:\SapiensSoftware\Vistatravel\home\src\Frontend\ProvidersBundle/Resources/views</argument>
+        <argument>FrontendProviders</argument>
+      </call>
+      <call method="addPath">
+        <argument>D:\SapiensSoftware\Vistatravel\home\src\Frontend\PublicBundle/Resources/views</argument>
+        <argument>FrontendPublic</argument>
       </call>
       <call method="addPath">
         <argument>D:\SapiensSoftware\Vistatravel\home\src\Acme\DemoBundle/Resources/views</argument>

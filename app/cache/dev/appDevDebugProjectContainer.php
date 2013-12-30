@@ -33,6 +33,8 @@ class appDevDebugProjectContainer extends Container
         $this->scopeChildren = array('request' => array());
         $this->methodMap = array(
             'acme.demo.listener' => 'getAcme_Demo_ListenerService',
+            'acme_admin.form.type.group' => 'getAcmeAdmin_Form_Type_GroupService',
+            'acme_admin.group.manager' => 'getAcmeAdmin_Group_ManagerService',
             'annotation_reader' => 'getAnnotationReaderService',
             'assetic.asset_factory' => 'getAssetic_AssetFactoryService',
             'assetic.asset_manager' => 'getAssetic_AssetManagerService',
@@ -123,7 +125,7 @@ class appDevDebugProjectContainer extends Container
             'fos_user.security.interactive_login_listener' => 'getFosUser_Security_InteractiveLoginListenerService',
             'fos_user.security.login_manager' => 'getFosUser_Security_LoginManagerService',
             'fos_user.user_manager' => 'getFosUser_UserManagerService',
-            'fos_user.user_provider.username' => 'getFosUser_UserProvider_UsernameService',
+            'fos_user.user_provider.username_email' => 'getFosUser_UserProvider_UsernameEmailService',
             'fos_user.username_form_type' => 'getFosUser_UsernameFormTypeService',
             'fos_user.util.email_canonicalizer' => 'getFosUser_Util_EmailCanonicalizerService',
             'fos_user.util.token_generator' => 'getFosUser_Util_TokenGeneratorService',
@@ -287,6 +289,32 @@ class appDevDebugProjectContainer extends Container
     protected function getAcme_Demo_ListenerService()
     {
         return $this->services['acme.demo.listener'] = new \Acme\DemoBundle\EventListener\ControllerListener($this->get('twig.extension.acme.demo'));
+    }
+
+    /**
+     * Gets the 'acme_admin.form.type.group' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Acme\AdminBundle\Form\Type\GroupType A Acme\AdminBundle\Form\Type\GroupType instance.
+     */
+    protected function getAcmeAdmin_Form_Type_GroupService()
+    {
+        return $this->services['acme_admin.form.type.group'] = new \Acme\AdminBundle\Form\Type\GroupType();
+    }
+
+    /**
+     * Gets the 'acme_admin.group.manager' service.
+     *
+     * This service is shared.
+     * This method always returns the same instance of the service.
+     *
+     * @return Acme\AdminBundle\Entity\GroupManager A Acme\AdminBundle\Entity\GroupManager instance.
+     */
+    protected function getAcmeAdmin_Group_ManagerService()
+    {
+        return $this->services['acme_admin.group.manager'] = new \Acme\AdminBundle\Entity\GroupManager($this->get('doctrine.orm.default_entity_manager'), 'Acme\\AdminBundle\\Entity\\Group');
     }
 
     /**
@@ -647,10 +675,11 @@ class appDevDebugProjectContainer extends Container
         $f = new \Doctrine\ORM\Mapping\Driver\DriverChain();
         $f->addDriver($d, 'FOS\\UserBundle\\Entity');
         $f->addDriver($e, 'Acme\\UserBundle\\Entity');
+        $f->addDriver(new \Doctrine\ORM\Mapping\Driver\AnnotationDriver($this->get('annotation_reader'), array(0 => 'D:\\SapiensSoftware\\Vistatravel\\home\\src\\Acme\\AdminBundle\\Entity')), 'Acme\\AdminBundle\\Entity');
         $f->addDriver(new \Doctrine\ORM\Mapping\Driver\XmlDriver(new \Doctrine\Common\Persistence\Mapping\Driver\SymfonyFileLocator(array('D:\\SapiensSoftware\\Vistatravel\\home\\vendor\\friendsofsymfony\\user-bundle\\FOS\\UserBundle\\Resources\\config\\doctrine\\model' => 'FOS\\UserBundle\\Model'), '.orm.xml')), 'FOS\\UserBundle\\Model');
 
         $g = new \Doctrine\ORM\Configuration();
-        $g->setEntityNamespaces(array('FOSUserBundle' => 'FOS\\UserBundle\\Entity', 'AcmeUserBundle' => 'Acme\\UserBundle\\Entity'));
+        $g->setEntityNamespaces(array('FOSUserBundle' => 'FOS\\UserBundle\\Entity', 'AcmeUserBundle' => 'Acme\\UserBundle\\Entity', 'AcmeAdminBundle' => 'Acme\\AdminBundle\\Entity'));
         $g->setMetadataCacheImpl($a);
         $g->setQueryCacheImpl($b);
         $g->setResultCacheImpl($c);
@@ -770,7 +799,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getForm_RegistryService()
     {
-        return $this->services['form.registry'] = new \Symfony\Component\Form\FormRegistry(array(0 => new \Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension($this, array('form' => 'form.type.form', 'birthday' => 'form.type.birthday', 'checkbox' => 'form.type.checkbox', 'choice' => 'form.type.choice', 'collection' => 'form.type.collection', 'country' => 'form.type.country', 'date' => 'form.type.date', 'datetime' => 'form.type.datetime', 'email' => 'form.type.email', 'file' => 'form.type.file', 'hidden' => 'form.type.hidden', 'integer' => 'form.type.integer', 'language' => 'form.type.language', 'locale' => 'form.type.locale', 'money' => 'form.type.money', 'number' => 'form.type.number', 'password' => 'form.type.password', 'percent' => 'form.type.percent', 'radio' => 'form.type.radio', 'repeated' => 'form.type.repeated', 'search' => 'form.type.search', 'textarea' => 'form.type.textarea', 'text' => 'form.type.text', 'time' => 'form.type.time', 'timezone' => 'form.type.timezone', 'url' => 'form.type.url', 'button' => 'form.type.button', 'submit' => 'form.type.submit', 'reset' => 'form.type.reset', 'currency' => 'form.type.currency', 'entity' => 'form.type.entity', 'fos_user_username' => 'fos_user.username_form_type', 'fos_user_profile' => 'fos_user.profile.form.type', 'fos_user_registration' => 'fos_user.registration.form.type', 'fos_user_change_password' => 'fos_user.change_password.form.type', 'fos_user_resetting' => 'fos_user.resetting.form.type'), array('form' => array(0 => 'form.type_extension.form.http_foundation', 1 => 'form.type_extension.form.validator', 2 => 'form.type_extension.csrf', 3 => 'form.type_extension.form.data_collector'), 'repeated' => array(0 => 'form.type_extension.repeated.validator'), 'submit' => array(0 => 'form.type_extension.submit.validator')), array(0 => 'form.type_guesser.validator', 1 => 'form.type_guesser.doctrine'))), $this->get('form.resolved_type_factory'));
+        return $this->services['form.registry'] = new \Symfony\Component\Form\FormRegistry(array(0 => new \Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension($this, array('form' => 'form.type.form', 'birthday' => 'form.type.birthday', 'checkbox' => 'form.type.checkbox', 'choice' => 'form.type.choice', 'collection' => 'form.type.collection', 'country' => 'form.type.country', 'date' => 'form.type.date', 'datetime' => 'form.type.datetime', 'email' => 'form.type.email', 'file' => 'form.type.file', 'hidden' => 'form.type.hidden', 'integer' => 'form.type.integer', 'language' => 'form.type.language', 'locale' => 'form.type.locale', 'money' => 'form.type.money', 'number' => 'form.type.number', 'password' => 'form.type.password', 'percent' => 'form.type.percent', 'radio' => 'form.type.radio', 'repeated' => 'form.type.repeated', 'search' => 'form.type.search', 'textarea' => 'form.type.textarea', 'text' => 'form.type.text', 'time' => 'form.type.time', 'timezone' => 'form.type.timezone', 'url' => 'form.type.url', 'button' => 'form.type.button', 'submit' => 'form.type.submit', 'reset' => 'form.type.reset', 'currency' => 'form.type.currency', 'entity' => 'form.type.entity', 'fos_user_username' => 'fos_user.username_form_type', 'fos_user_profile' => 'fos_user.profile.form.type', 'fos_user_registration' => 'fos_user.registration.form.type', 'fos_user_change_password' => 'fos_user.change_password.form.type', 'fos_user_resetting' => 'fos_user.resetting.form.type', 'group' => 'acme_admin.form.type.group'), array('form' => array(0 => 'form.type_extension.form.http_foundation', 1 => 'form.type_extension.form.validator', 2 => 'form.type_extension.csrf', 3 => 'form.type_extension.form.data_collector'), 'repeated' => array(0 => 'form.type_extension.repeated.validator'), 'submit' => array(0 => 'form.type_extension.submit.validator')), array(0 => 'form.type_guesser.validator', 1 => 'form.type_guesser.doctrine'))), $this->get('form.resolved_type_factory'));
     }
 
     /**
@@ -2124,7 +2153,7 @@ class appDevDebugProjectContainer extends Container
         $e = $this->get('http_kernel');
         $f = $this->get('security.authentication.manager');
 
-        $g = new \Symfony\Component\HttpFoundation\RequestMatcher('^/login$');
+        $g = new \Symfony\Component\HttpFoundation\RequestMatcher('^/admin/login$');
 
         $h = new \Symfony\Component\HttpFoundation\RequestMatcher('^/register');
 
@@ -2143,13 +2172,13 @@ class appDevDebugProjectContainer extends Container
 
         $m = new \Symfony\Component\Security\Http\HttpUtils($d, $d);
 
-        $n = new \Symfony\Component\Security\Http\Firewall\LogoutListener($b, $m, new \Symfony\Component\Security\Http\Logout\DefaultLogoutSuccessHandler($m, '/'), array('csrf_parameter' => '_csrf_token', 'intention' => 'logout', 'logout_path' => '/logout'));
+        $n = new \Symfony\Component\Security\Http\Firewall\LogoutListener($b, $m, new \Symfony\Component\Security\Http\Logout\DefaultLogoutSuccessHandler($m, '/admin/'), array('csrf_parameter' => '_csrf_token', 'intention' => 'logout', 'logout_path' => '/admin/logout'));
         $n->addHandler(new \Symfony\Component\Security\Http\Logout\SessionLogoutHandler());
 
-        $o = new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessHandler($m, array('always_use_default_target_path' => false, 'default_target_path' => '/', 'login_path' => '/login', 'target_path_parameter' => '_target_path', 'use_referer' => false));
+        $o = new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationSuccessHandler($m, array('login_path' => '/admin/login', 'always_use_default_target_path' => false, 'default_target_path' => '/', 'target_path_parameter' => '_target_path', 'use_referer' => false));
         $o->setProviderKey('main');
 
-        return $this->services['security.firewall.map.context.main'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => new \Symfony\Component\Security\Http\Firewall\ChannelListener($l, new \Symfony\Component\Security\Http\EntryPoint\RetryAuthenticationEntryPoint(80, 443), $a), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($b, array(0 => $this->get('fos_user.user_provider.username')), 'main', $a, $c), 2 => $n, 3 => new \Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener($b, $f, $this->get('security.authentication.session_strategy'), $m, 'main', $o, new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler($e, $m, array('login_path' => '/login', 'failure_path' => NULL, 'failure_forward' => false, 'failure_path_parameter' => '_failure_path'), $a), array('check_path' => '/login_check', 'use_forward' => false, 'require_previous_session' => true, 'username_parameter' => '_username', 'password_parameter' => '_password', 'csrf_parameter' => '_csrf_token', 'intention' => 'authenticate', 'post_only' => true), $a, $c, $this->get('form.csrf_provider')), 4 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '52b801a20b4b7', $a), 5 => new \Symfony\Component\Security\Http\Firewall\AccessListener($b, $this->get('security.access.decision_manager'), $l, $f)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $this->get('security.authentication.trust_resolver'), $m, 'main', new \Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint($e, $m, '/login', false), NULL, NULL, $a));
+        return $this->services['security.firewall.map.context.main'] = new \Symfony\Bundle\SecurityBundle\Security\FirewallContext(array(0 => new \Symfony\Component\Security\Http\Firewall\ChannelListener($l, new \Symfony\Component\Security\Http\EntryPoint\RetryAuthenticationEntryPoint(80, 443), $a), 1 => new \Symfony\Component\Security\Http\Firewall\ContextListener($b, array(0 => $this->get('fos_user.user_provider.username_email')), 'main', $a, $c), 2 => $n, 3 => new \Symfony\Component\Security\Http\Firewall\UsernamePasswordFormAuthenticationListener($b, $f, $this->get('security.authentication.session_strategy'), $m, 'main', $o, new \Symfony\Component\Security\Http\Authentication\DefaultAuthenticationFailureHandler($e, $m, array('login_path' => '/admin/login', 'failure_path' => NULL, 'failure_forward' => false, 'failure_path_parameter' => '_failure_path'), $a), array('check_path' => '/login_check', 'use_forward' => false, 'require_previous_session' => true, 'username_parameter' => '_username', 'password_parameter' => '_password', 'csrf_parameter' => '_csrf_token', 'intention' => 'authenticate', 'post_only' => true), $a, $c, $this->get('form.csrf_provider')), 4 => new \Symfony\Component\Security\Http\Firewall\AnonymousAuthenticationListener($b, '52c1258a765a9', $a), 5 => new \Symfony\Component\Security\Http\Firewall\AccessListener($b, $this->get('security.access.decision_manager'), $l, $f)), new \Symfony\Component\Security\Http\Firewall\ExceptionListener($b, $this->get('security.authentication.trust_resolver'), $m, 'main', new \Symfony\Component\Security\Http\EntryPoint\FormAuthenticationEntryPoint($e, $m, '/admin/login', false), NULL, NULL, $a));
     }
 
     /**
@@ -2636,7 +2665,7 @@ class appDevDebugProjectContainer extends Container
     {
         $this->services['templating.helper.logout_url'] = $instance = new \Symfony\Bundle\SecurityBundle\Templating\Helper\LogoutUrlHelper($this, $this->get('router'));
 
-        $instance->registerListener('main', '/logout', 'logout', '_csrf_token', NULL);
+        $instance->registerListener('main', '/admin/logout', 'logout', '_csrf_token', NULL);
 
         return $instance;
     }
@@ -3396,6 +3425,11 @@ class appDevDebugProjectContainer extends Container
         $instance->addPath('D:/SapiensSoftware/Vistatravel/home/app/Resources/FOSUserBundle/views', 'FOSUser');
         $instance->addPath('D:\\SapiensSoftware\\Vistatravel\\home\\vendor\\friendsofsymfony\\user-bundle\\FOS\\UserBundle/Resources/views', 'FOSUser');
         $instance->addPath('D:\\SapiensSoftware\\Vistatravel\\home\\src\\Acme\\AdminBundle/Resources/views', 'AcmeAdmin');
+        $instance->addPath('D:\\SapiensSoftware\\Vistatravel\\home\\src\\Frontend\\ConfigurationBundle/Resources/views', 'FrontendConfiguration');
+        $instance->addPath('D:\\SapiensSoftware\\Vistatravel\\home\\src\\Frontend\\AdminBundle/Resources/views', 'FrontendAdmin');
+        $instance->addPath('D:\\SapiensSoftware\\Vistatravel\\home\\src\\Frontend\\AppBundle/Resources/views', 'FrontendApp');
+        $instance->addPath('D:\\SapiensSoftware\\Vistatravel\\home\\src\\Frontend\\ProvidersBundle/Resources/views', 'FrontendProviders');
+        $instance->addPath('D:\\SapiensSoftware\\Vistatravel\\home\\src\\Frontend\\PublicBundle/Resources/views', 'FrontendPublic');
         $instance->addPath('D:\\SapiensSoftware\\Vistatravel\\home\\src\\Acme\\DemoBundle/Resources/views', 'AcmeDemo');
         $instance->addPath('D:\\SapiensSoftware\\Vistatravel\\home\\vendor\\symfony\\symfony\\src\\Symfony\\Bundle\\WebProfilerBundle/Resources/views', 'WebProfiler');
         $instance->addPath('D:\\SapiensSoftware\\Vistatravel\\home\\vendor\\sensio\\distribution-bundle\\Sensio\\Bundle\\DistributionBundle/Resources/views', 'SensioDistribution');
@@ -3599,7 +3633,7 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
-     * Gets the 'fos_user.user_provider.username' service.
+     * Gets the 'fos_user.user_provider.username_email' service.
      *
      * This service is shared.
      * This method always returns the same instance of the service.
@@ -3608,11 +3642,11 @@ class appDevDebugProjectContainer extends Container
      * If you want to be able to request this service from the container directly,
      * make it public, otherwise you might end up with broken code.
      *
-     * @return FOS\UserBundle\Security\UserProvider A FOS\UserBundle\Security\UserProvider instance.
+     * @return FOS\UserBundle\Security\EmailUserProvider A FOS\UserBundle\Security\EmailUserProvider instance.
      */
-    protected function getFosUser_UserProvider_UsernameService()
+    protected function getFosUser_UserProvider_UsernameEmailService()
     {
-        return $this->services['fos_user.user_provider.username'] = new \FOS\UserBundle\Security\UserProvider($this->get('fos_user.user_manager'));
+        return $this->services['fos_user.user_provider.username_email'] = new \FOS\UserBundle\Security\EmailUserProvider($this->get('fos_user.user_manager'));
     }
 
     /**
@@ -3666,7 +3700,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getSecurity_Authentication_ManagerService()
     {
-        $this->services['security.authentication.manager'] = $instance = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider($this->get('fos_user.user_provider.username'), $this->get('security.user_checker'), 'main', $this->get('security.encoder_factory'), true), 1 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('52b801a20b4b7')), true);
+        $this->services['security.authentication.manager'] = $instance = new \Symfony\Component\Security\Core\Authentication\AuthenticationProviderManager(array(0 => new \Symfony\Component\Security\Core\Authentication\Provider\DaoAuthenticationProvider($this->get('fos_user.user_provider.username_email'), $this->get('security.user_checker'), 'main', $this->get('security.encoder_factory'), true), 1 => new \Symfony\Component\Security\Core\Authentication\Provider\AnonymousAuthenticationProvider('52c1258a765a9')), true);
 
         $instance->setEventDispatcher($this->get('debug.event_dispatcher'));
 
@@ -3823,7 +3857,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getValidator_Mapping_ClassMetadataFactoryService()
     {
-        return $this->services['validator.mapping.class_metadata_factory'] = new \Symfony\Component\Validator\Mapping\ClassMetadataFactory(new \Symfony\Component\Validator\Mapping\Loader\LoaderChain(array(0 => new \Symfony\Component\Validator\Mapping\Loader\AnnotationLoader($this->get('annotation_reader')), 1 => new \Symfony\Component\Validator\Mapping\Loader\StaticMethodLoader(), 2 => new \Symfony\Component\Validator\Mapping\Loader\XmlFilesLoader(array(0 => 'D:\\SapiensSoftware\\Vistatravel\\home\\vendor\\symfony\\symfony\\src\\Symfony\\Component\\Form/Resources/config/validation.xml', 1 => 'D:\\SapiensSoftware\\Vistatravel\\home\\vendor\\friendsofsymfony\\user-bundle\\FOS\\UserBundle\\Resources\\config\\validation.xml', 2 => 'D:\\SapiensSoftware\\Vistatravel\\home\\vendor\\friendsofsymfony\\user-bundle\\FOS\\UserBundle\\Resources\\config\\validation\\orm.xml')), 3 => new \Symfony\Component\Validator\Mapping\Loader\YamlFilesLoader(array()))), NULL);
+        return $this->services['validator.mapping.class_metadata_factory'] = new \Symfony\Component\Validator\Mapping\ClassMetadataFactory(new \Symfony\Component\Validator\Mapping\Loader\LoaderChain(array(0 => new \Symfony\Component\Validator\Mapping\Loader\AnnotationLoader($this->get('annotation_reader')), 1 => new \Symfony\Component\Validator\Mapping\Loader\StaticMethodLoader(), 2 => new \Symfony\Component\Validator\Mapping\Loader\XmlFilesLoader(array(0 => 'D:\\SapiensSoftware\\Vistatravel\\home\\vendor\\symfony\\symfony\\src\\Symfony\\Component\\Form/Resources/config/validation.xml', 1 => 'D:\\SapiensSoftware\\Vistatravel\\home\\vendor\\friendsofsymfony\\user-bundle\\FOS\\UserBundle\\Resources\\config\\validation.xml', 2 => 'D:\\SapiensSoftware\\Vistatravel\\home\\vendor\\friendsofsymfony\\user-bundle\\FOS\\UserBundle\\Resources\\config\\validation\\orm.xml')), 3 => new \Symfony\Component\Validator\Mapping\Loader\YamlFilesLoader(array(0 => 'D:\\SapiensSoftware\\Vistatravel\\home\\src\\Acme\\AdminBundle\\Resources\\config\\validation.yml')))), NULL);
     }
 
     /**
@@ -3880,7 +3914,7 @@ class appDevDebugProjectContainer extends Container
             'kernel.root_dir' => 'D:/SapiensSoftware/Vistatravel/home/app',
             'kernel.environment' => 'dev',
             'kernel.debug' => true,
-            'kernel.name' => 'app',
+            'kernel.name' => 'ap_',
             'kernel.cache_dir' => 'D:/SapiensSoftware/Vistatravel/home/app/cache/dev',
             'kernel.logs_dir' => 'D:/SapiensSoftware/Vistatravel/home/app/logs',
             'kernel.bundles' => array(
@@ -3895,6 +3929,11 @@ class appDevDebugProjectContainer extends Container
                 'FOSUserBundle' => 'FOS\\UserBundle\\FOSUserBundle',
                 'AcmeUserBundle' => 'Acme\\UserBundle\\AcmeUserBundle',
                 'AcmeAdminBundle' => 'Acme\\AdminBundle\\AcmeAdminBundle',
+                'FrontendConfigurationBundle' => 'Frontend\\ConfigurationBundle\\FrontendConfigurationBundle',
+                'FrontendAdminBundle' => 'Frontend\\AdminBundle\\FrontendAdminBundle',
+                'FrontendAppBundle' => 'Frontend\\AppBundle\\FrontendAppBundle',
+                'FrontendProvidersBundle' => 'Frontend\\ProvidersBundle\\FrontendProvidersBundle',
+                'FrontendPublicBundle' => 'Frontend\\PublicBundle\\FrontendPublicBundle',
                 'AcmeDemoBundle' => 'Acme\\DemoBundle\\AcmeDemoBundle',
                 'WebProfilerBundle' => 'Symfony\\Bundle\\WebProfilerBundle\\WebProfilerBundle',
                 'SensioDistributionBundle' => 'Sensio\\Bundle\\DistributionBundle\\SensioDistributionBundle',
@@ -4054,7 +4093,7 @@ class appDevDebugProjectContainer extends Container
                 2 => 'D:\\SapiensSoftware\\Vistatravel\\home\\vendor\\friendsofsymfony\\user-bundle\\FOS\\UserBundle\\Resources\\config\\validation\\orm.xml',
             ),
             'validator.mapping.loader.yaml_files_loader.mapping_files' => array(
-
+                0 => 'D:\\SapiensSoftware\\Vistatravel\\home\\src\\Acme\\AdminBundle\\Resources\\config\\validation.yml',
             ),
             'validator.expression.class' => 'Symfony\\Component\\Validator\\Constraints\\ExpressionValidator',
             'validator.translation_domain' => 'validators',
